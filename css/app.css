@@ -34,3 +34,9 @@ h1 {
 .difficulty {
     margin-left: 550px;
 }
+
+.modal {
+    position: absolute;
+    left: 500px;
+    margin: auto;
+}

@@ -1,7 +1,7 @@
 'use strict';
 console.log('mine sweeper');
 
-const BOMB = 'X';
+const BOMB = '&#128163';
 const FLAG = 'X?';
 
 var gBoard;
@@ -9,29 +9,28 @@ var gLevel;
 var gGame;
 var gDifficulty = 4;
 var gMines;
-var gMinesCheck;
-var gShownCount = 0;
+var gIsFirstMove;
+
 
 
 
 function init() {
+    gIsFirstMove = true;
     gGame = resetGame();
     gLevel = resetLevel(gDifficulty);
-    gMines = resetMines(gLevel.mineCount, gDifficulty);
-    gMinesCheck = createMinesCheck(gMines.length);
-    gBoard = buildBoard(gDifficulty, gMines);
-    setMinesNegsCount(gBoard);
-
-    //  ******************checking board:****************
-    // gGame.isOn = false;  
-    // gBoard[1][1].isMine = true;
-    // gBoard[2][1].isMine = true;
-    // **************************************************
-
-
+    gBoard = createFirstBoard();
     renderBoard(gBoard);
 
     return;
+}
+
+function startGame(elBtn, i, j) {
+    gIsFirstMove = false;
+    var StartIdx = i * gLevel.size + j;
+    gMines = resetMines(gLevel.mineCount, gDifficulty, StartIdx);
+    gBoard = buildBoard(gDifficulty, gMines);
+    setMinesNegsCount(gBoard);
+    cellClicked(elBtn, i, j);
 }
 
 function createCell() {
@@ -97,20 +96,20 @@ function WhichButton(ev) {
     var j = +temp[3];
     if (!j && j !== 0) {
         if (!gBoard[i][i].isMarked) {
-            if (gMinesCheck.length === 0) return;
+            if (gGame.markedCount === gLevel.mineCount) return;
             gBoard[i][i].isMarked = !(gBoard[i][i].isMarked);
-            gMinesCheck.pop();
+            gGame.markedCount++;
         } else {
             gBoard[i][i].isMarked = !(gBoard[i][i].isMarked);
-            gMinesCheck.push([]);
+            gGame.markedCount--;
         }
     } else if (!gBoard[i][j].isMarked) {
-        if (gMinesCheck.length === 0) return;
+        if (gGame.markedCount === gLevel.mineCount) return;
         gBoard[i][j].isMarked = !(gBoard[i][j].isMarked);
-        gMinesCheck.pop();
+        gGame.markedCount++;
     } else {
         gBoard[i][j].isMarked = !(gBoard[i][j].isMarked);
-        gMinesCheck.push([]);
+        gGame.markedCount--;
     }
     if (checkVictory()) handleVictory();
     renderBoard(gBoard);
@@ -119,17 +118,18 @@ function WhichButton(ev) {
 }
 
 function cellClicked(elBtn, i, j) {
+    if (gIsFirstMove) startGame(elBtn, i, j);
     if (gBoard[i][j].isShown || gBoard[i][j].isMarked || !gGame.isOn) return;
     if (gBoard[i][j].isMine) {
         console.log('BOMB');
-        handleMineClicked(i, j);
+        handleMineClicked(elBtn, i, j);
     } else exposeArea(elBtn, i, j);
 }
 
 function exposeArea(elBtn, rowIdx, colIdx) {
     if (gBoard[rowIdx][colIdx].mineNegsCount !== 0) {
         renderCell(elBtn, rowIdx, colIdx, gBoard[rowIdx][colIdx].mineNegsCount);
-        gShownCount++;
+        gGame.shownCount++;
     } else {
         for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
             if (i < 0 || i > gBoard.length - 1) continue;
@@ -137,35 +137,46 @@ function exposeArea(elBtn, rowIdx, colIdx) {
                 if (j < 0 || j > gBoard.length - 1) continue;
                 if (!(gBoard[i][j].isShown)) {
                     gBoard[i][j].isShown = true;
-                    gShownCount++;
+                    gGame.shownCount++;
                 }
             }
         }
         renderBoard(gBoard);
     }
 
-    console.log(gShownCount);
+    console.log(gGame.shownCount);
     if (checkVictory()) handleVictory();
     return;
 }
 
 function checkVictory() {
-    if (gShownCount === gDifficulty ** 2 - gLevel.mineCount && gMinesCheck.length === 0) return true;
+    if (gGame.shownCount === gDifficulty ** 2 - gLevel.mineCount && gGame.markedCount === gLevel.mineCount) {
+        return true;
+    }
     return false;
 }
 
-function handleMineClicked() {
+function handleMineClicked(elBtn, i, j) {
     if (gGame.live === 0) gameOver();
+    else gGame.live--;
+    return;
 }
 
 function gameOver() {
     gGame.isOn = false;
     renderBoard(gBoard);
     console.log('game over');
-    gShownCount = 0;
+    gGame.shownCount = 0;
+
 }
 
 function handleVictory() {
     console.log('victory');
-    gShownCount = 0;
+    gGame.shownCount = 0;
+    gGame.isOn = false;
+
+}
+
+function restartGame(elBtn) {
+    init();
 }

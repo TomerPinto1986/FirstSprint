@@ -37,12 +37,13 @@ function resetLevel(size) {
     return gameLevel;
 }
 
-function resetMines(mineCount, size) {
+function resetMines(mineCount, size, noBombIdx) {
     var cellsFree = [];
     var mines = [];
     for (var i = 0; i < size ** 2; i++) {
         cellsFree.push([i]);
     }
+    mines.splice(noBombIdx, 1);
 
     for (var i = 0; i < mineCount; i++) {
         var res = getRandomInt(0, cellsFree.length)
@@ -75,14 +76,18 @@ function countNegs(mat, rowIdx, colIdx) {
     return count;
 }
 
-
-function createMinesCheck(length) {
-    var minesCheck = [];
-    for (var i = 0; i < length; i++) minesCheck.push([]);
-    return minesCheck;
-}
-
 function changeDifficulty(difficulty) {
     gDifficulty = difficulty;
     init();
+}
+
+function createFirstBoard() {
+    var board = [];
+    for (var i = 0; i < gDifficulty; i++) {
+        board[i] = [];
+        for (var j = 0; j < gDifficulty; j++) {
+            board[i][j] = '';
+        }
+    }
+    return board;
 }
