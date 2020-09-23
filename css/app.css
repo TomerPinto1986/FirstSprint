@@ -1,4 +1,5 @@
 h1 {
+    background-color: rgb(255, 139, 156);
     text-align: center;
     color: rgb(49, 10, 46);
 }
@@ -17,9 +18,9 @@ h1 {
 }
 
 .table {
+    position: relative;
+    left: 500px;
     background-color: rgb(255, 139, 156);
-    margin-left: auto;
-    margin-right: auto;
     color: lightcyan;
     border: 1px solid rgb(255, 251, 0);
 }
@@ -37,6 +38,13 @@ h1 {
 
 .modal {
     position: absolute;
-    left: 500px;
-    margin: auto;
+    left: 400px;
+    padding: 5px;
+    background-color: rgb(138, 21, 21);
+}
+
+.lives {
+    position: absolute;
+    top: 200px;
+    left: 380px;
 }

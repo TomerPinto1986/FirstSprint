@@ -12,7 +12,6 @@
 
     <h1>Mine Sweeper</h1>
 
-    <div class="modal" onclick="restartGame()"> &#128512 </div>
 
     <div class="difficulty">
         <button onclick="changeDifficulty(4)">Easy</button>
@@ -21,6 +20,10 @@
     </div>
 
     <table class="table">
+        <div class="modal" onclick="restartGame(this)"> &#128512 </div>
+
+        <div class="lives">&#128156&#128156&#128156</div>
+
 
         <tbody class="board">
         </tbody>

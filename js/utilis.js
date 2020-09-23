@@ -6,7 +6,7 @@ function resetGame() {
         shownCount: 0,
         markedCount: 0,
         secsPassed: 0,
-        live: 0
+        live: 3
     }
     return gameStat;
 }
@@ -43,7 +43,7 @@ function resetMines(mineCount, size, noBombIdx) {
     for (var i = 0; i < size ** 2; i++) {
         cellsFree.push([i]);
     }
-    mines.splice(noBombIdx, 1);
+    cellsFree.splice(noBombIdx, 1);
 
     for (var i = 0; i < mineCount; i++) {
         var res = getRandomInt(0, cellsFree.length)
@@ -78,7 +78,7 @@ function countNegs(mat, rowIdx, colIdx) {
 
 function changeDifficulty(difficulty) {
     gDifficulty = difficulty;
-    init();
+    restartGame();
 }
 
 function createFirstBoard() {

@@ -156,9 +156,17 @@ function checkVictory() {
     return false;
 }
 
-function handleMineClicked(elBtn, i, j) {
+function handleMineClicked() {
     if (gGame.live === 0) gameOver();
-    else gGame.live--;
+    else {
+        var elLive = document.querySelector('.lives');
+        var hearts = '';
+        for (var i = 0; i < gGame.live - 1; i++) {
+            hearts += '💜';
+        }
+        elLive.innerText = hearts;
+        gGame.live--;
+    }
     return;
 }
 
@@ -178,5 +186,7 @@ function handleVictory() {
 }
 
 function restartGame(elBtn) {
+    var elLive = document.querySelector('.lives');
+    elLive.innerText = '💜💜💜'
     init();
 }
