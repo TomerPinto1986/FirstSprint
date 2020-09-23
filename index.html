@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mine-sweeper</title>
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body onload="init()" oncontextmenu="return false;">
+
+    <h1>Mine Sweeper</h1>
+    <div class="difficulty">
+        <button onclick="changeDifficulty(4)">Easy</button>
+        <button onclick="changeDifficulty(8)">Normal</button>
+        <button onclick="changeDifficulty(12)">World Class</button>
+    </div>
+
+    <table class="table">
+
+        <tbody class="board">
+        </tbody>
+
+    </table>
+
+    <script src="js/utilis.js"></script>
+    <script src="js/game.js"></script>
+</body>
+
+</html>
