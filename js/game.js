@@ -16,9 +16,14 @@ var gIsRightClick = false;
 var gHints;
 var gHintLocation;
 var gHelpLocation;
-
+var gisPause;
 
 function init() {
+    // localStorage.clear();
+    if (localStorage.bestPlayerEasy) {
+        var elBestScore = document.querySelector('.score');
+        elBestScore.innerText = localStorage.bestPlayerEasy;
+    }
     var elSafe = document.querySelector('.safe')
     elSafe.innerText = 'safe\n' + 3;
     gHints = resetHints();
@@ -106,7 +111,7 @@ function renderBoard(board) {
 }
 
 function WhichButton(ev) {
-
+    if (gisPause) return;
 
     // *************  NOT SO NICE WAY TO GET COORDS   **************
 
@@ -144,9 +149,8 @@ function cellRightClick(i, j) {
         gBoard[i][j].isMarked = !(gBoard[i][j].isMarked);
         gGame.markedCount--;
     }
-    if (checkVictory()) handleVictory();
     renderBoard(gBoard);
-
+    if (checkVictory()) handleVictory();
     return;
 }
 
@@ -199,6 +203,7 @@ function handleMineClicked(rowIdx, colIdx) {
     if (gGame.live === 0) gameOver();
     else {
         gBoard[rowIdx][colIdx].isShown = true;
+        gisPause = true;
         renderBoard(gBoard);
         gHelpLocation = {
             i: rowIdx,
@@ -207,6 +212,7 @@ function handleMineClicked(rowIdx, colIdx) {
         setTimeout(function() {
             gBoard[gHelpLocation.i][gHelpLocation.j].isShown = false;
             renderBoard(gBoard);
+            gisPause = false;
         }, 700);
         var elLive = document.querySelector('.lives');
         var hearts = '';
@@ -241,44 +247,59 @@ function handleVictory() {
     gGame.shownCount = 0;
     gGame.isOn = false;
     clearInterval(gIntervalTimer);
-    storeData();
+    setTimeout(storeData, 1000);
 }
 
 function storeData() {
     console.log('store data');
     switch (gDifficulty) {
         case 4:
-            console.log('level easy');
-            if (!localStorage.bestScoreEasy) localStorage.bestScoreEasy = gGame.secsPassed;
-            if (localStorage.bestScoreEasy > gGame.secsPassed) {
+            if (!localStorage.bestScoreEasy) {
+                localStorage.bestScoreEasy = gGame.secsPassed;
+                var userName = prompt('You are first for now! enter your name:');
+                localStorage.bestPlayerEasy = userName + ' ROCKs with time of: ' + localStorage.bestScoreEasy + ' sec';
+                var elBestScore = document.querySelector('.score');
+                elBestScore.innerText = localStorage.bestPlayerEasy;
+            } else if (localStorage.bestScoreEasy > gGame.secsPassed) {
                 localStorage.bestScoreEasy = gGame.secsPassed;
                 var userName = prompt('Well Done you have The best score, write your name for the leader bord:');
-                localStorage.bestPlayerEasy = userName + ' ROCKs with time of:' + localStorage.bestScoreEasy + ' sec';
-                console.log('level normal');
+                localStorage.bestPlayerEasy = userName + ' ROCKs with time of: ' + localStorage.bestScoreEasy + ' sec';
+                var elBestScore = document.querySelector('.score');
+                elBestScore.innerText = localStorage.bestPlayerEasy;
             }
-            console.log('level easy');
+
             break;
         case 8:
-            console.log('level normal');
-            if (!localStorage.bestScoreNormal) localStorage.bestScoreNormal = gGame.secsPassed;
-            if (localStorage.bestScoreNormal > gGame.secsPassed) {
+            if (!localStorage.bestScoreNormal) {
+                localStorage.bestScoreNormal = gGame.secsPassed;
+                var userName = prompt('You are first for now! enter your name:');
+                localStorage.bestPlayerNormal = userName + ' ROCKs with time of: ' + localStorage.bestScoreNormal + ' sec';
+                var elBestScore = document.querySelector('.score');
+                elBestScore.innerText = localStoraNormal;
+            } else if (localStorage.bestScoreNormal > gGame.secsPassed) {
                 localStorage.bestScoreNormal = gGame.secsPassed;
                 var userName = prompt('Well Done you have The best score, write your name for the leader bord:');
-                localStorage.bestPlayerNormal = userName + ' ROCKs with time of:' + localStorage.bestScoreNormal + ' sec';
-                console.log('level normal');
+                localStoraNormal = userName + ' ROCKs with time of: ' + localStorage.bestScoreNormal + ' sec';
+                var elBestScore = document.querySelector('.score');
+                elBestScore.innerText = localStoraNormal;
             }
 
 
             break;
         case 12:
-            if (!localStorage.bestScoreExtream) localStorage.bestScoreExtream = gGame.secsPassed;
-            if (localStorage.bestScoreExtream > gGame.secsPassed) {
+            if (!localStorage.bestScoreExtream) {
+                localStorage.bestScoreExtream = gGame.secsPassed;
+                var userName = prompt('You are first for now! enter your name:');
+                localStorage.bestPlayerExtream = userName + ' ROCKs with time of: ' + localStorage.bestScoreExtream + ' sec';
+                var elBestScore = document.querySelector('.score');
+                elBestScore.innerText = localStoraExtream;
+            } else if (localStorage.bestScoreExtream > gGame.secsPassed) {
                 localStorage.bestScoreExtream = gGame.secsPassed;
                 var userName = prompt('Well Done you have The best score, write your name for the leader bord:');
-                localStorage.bestPlayerExtream = userName + ' ROCKs with time of:' + localStorage.bestScoreExtream + ' sec';
-                console.log('level normal');
+                localStoraExtream = userName + ' ROCKs with time of: ' + localStorage.bestScoreExtream + ' sec';
+                var elBestScore = document.querySelector('.score');
+                elBestScore.innerText = localStoraExtream;
             }
-            break;
     }
 }
 
@@ -324,6 +345,7 @@ function handleClickHint(rowIdx, colIdx) {
             gBoard[i][j].isHinted = true;
         }
     }
+    gisPause = true;
     renderBoard(gBoard);
     setTimeout(closeHints, 2000);
     for (var i = 0; i < gHints.length; i++) {
@@ -347,6 +369,7 @@ function closeHints() {
         }
     }
     renderBoard(gBoard);
+    gisPause = false;
 }
 
 function showSafe() {
