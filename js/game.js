@@ -119,7 +119,6 @@ function WhichButton(ev) {
 
     if (gIsFirstMove) {
         gIsFirstMove = false;
-        // console.log(ev.which);
         gIsRightClick = (ev.which === 3);
         startGame(ev.currentTarget, i, j);
         return;
@@ -136,7 +135,6 @@ function WhichButton(ev) {
 }
 
 function cellRightClick(i, j) {
-    // console.log('right button');
 
     if (!gBoard[i][j].isMarked) {
         if (gGame.markedCount === gLevel.mineCount) return;
@@ -161,7 +159,6 @@ function cellClicked(elBtn, i, j) {
     }
     if (gBoard[i][j].isShown || gBoard[i][j].isMarked || !gGame.isOn) return;
     if (gBoard[i][j].isMine) {
-        // console.log('BOMB');
         handleMineClicked(i, j);
     } else exposeArea(elBtn, i, j);
 }
@@ -237,7 +234,7 @@ function gameOver() {
 
 function handleVictory() {
     var elvictory = document.querySelector('.victory');
-    elvictory.style.display = 'block';
+    elvictory.style.display = 'inline';
     var elRestart = document.querySelector('.restart');
     elRestart.innerText = '😝';
     console.log('victory');
@@ -283,7 +280,6 @@ function storeData() {
             }
             break;
     }
-    changeDifficulty(gDifficulty);
 }
 
 function restartGame() {
