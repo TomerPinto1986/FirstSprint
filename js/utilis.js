@@ -6,13 +6,18 @@ function resetGame() {
         shownCount: 0,
         markedCount: 0,
         secsPassed: 0,
-        live: 3
+        live: 3,
+        isGameHint: false
     }
     return gameStat;
 }
 
 function checkCellToDisplay(cell) {
     if (gGame.isOn) {
+        if (cell.isHinted) {
+            if (cell.isMine) return BOMB;
+            return cell.mineNegsCount;
+        }
         if (!cell.isShown) {
             if (cell.isMarked) return FLAG;
             else return '';
@@ -103,4 +108,41 @@ function runTimer() {
     var timer = ((Date.now() - gStartTime)) / 1000;
     elModal.innerText = timer;
     return;
+}
+
+function resetHints() {
+    var hints = [];
+    for (var i = 0; i < 3; i++) {
+        hints[i] = {
+            id: i,
+            isOn: false
+        }
+    }
+    var elHints = document.querySelectorAll('.hints button');
+    console.log(elHints);
+    for (var i = 0; i < hints.length; i++) {
+        elHints[i].style.display = 'inline';
+        elHints[i].style.backgroundColor = ' rgb(93, 206, 187)';
+    }
+    return hints;
+}
+
+function renderHintsBoard(board) {
+    var strHTML = '';
+    for (var i = 0; i < gDifficulty; i++) {
+        strHTML += '<tr>'
+        for (var j = 0; j < gDifficulty; j++) {
+            var res = checkCellToDisplay(board[i][j]);
+            res = (res === 0) ? '' : res;
+            res = (board[i][j].isMine) ? BOMB : res;
+            var cellShown = (board[i][j].isShown) ? 'shown' : '';
+            strHTML += `<td onmousedown="WhichButton(event)" class="cell cell ${i} - ${j} ${cellShown}">`
+                // onclick="cellClicked(this, ${i}, ${j})"
+            strHTML += res;
+            strHTML += '</td>';
+        }
+        strHTML += '</tr>';
+    }
+    var elTable = document.querySelector('.board');
+    elTable.innerHTML = strHTML;
 }
