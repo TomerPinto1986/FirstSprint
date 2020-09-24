@@ -7,7 +7,9 @@ function resetGame() {
         markedCount: 0,
         secsPassed: 0,
         live: 3,
-        isGameHint: false
+        isGameHint: false,
+        safeCount: 3,
+        isHelp: false
     }
     return gameStat;
 }
@@ -21,6 +23,8 @@ function checkCellToDisplay(cell) {
         if (!cell.isShown) {
             if (cell.isMarked) return FLAG;
             else return '';
+        } else if (cell.isMine === true) {
+            return BOMB
         } else return cell.mineNegsCount;
     } else if (cell.isMine) return BOMB;
     else if (cell.isShown) return cell.mineNegsCount;
@@ -84,6 +88,24 @@ function countNegs(mat, rowIdx, colIdx) {
 function changeDifficulty(difficulty) {
     gDifficulty = difficulty;
     restartGame();
+    switch (gDifficulty) {
+        case 4:
+            console.log('Easy');
+            var elBestScore = document.querySelector('.score');
+            elBestScore.innerText = localStorage.bestPlayerEasy;
+            break;
+        case 8:
+            console.log('Normal');
+            var elBestScore = document.querySelector('.score');
+            console.log(elBestScore, localStorage.bestPlayerNormal);
+            elBestScore.innerText = localStorage.bestPlayerNormal;
+            break;
+        case 12:
+            console.log('extream');
+            var elBestScore = document.querySelector('.score');
+            elBestScore.innerText = localStorage.bestPlayerExtream;
+            break;
+    }
 }
 
 function createFirstBoard() {
@@ -99,14 +121,13 @@ function createFirstBoard() {
 
 function startTimer() {
     gStartTime = Date.now();
-    gIntervalTimer = setInterval(runTimer, 1);
+    gIntervalTimer = setInterval(runTimer, 10);
 }
 
 function runTimer() {
     var elModal = document.querySelector('.timer');
-    // elModal.style.display = 'block';
-    var timer = ((Date.now() - gStartTime)) / 1000;
-    elModal.innerText = timer;
+    gGame.secsPassed = ((Date.now() - gStartTime)) / 1000;
+    elModal.innerText = gGame.secsPassed;
     return;
 }
 
@@ -119,7 +140,7 @@ function resetHints() {
         }
     }
     var elHints = document.querySelectorAll('.hints button');
-    console.log(elHints);
+    // console.log(elHints);
     for (var i = 0; i < hints.length; i++) {
         elHints[i].style.display = 'inline';
         elHints[i].style.backgroundColor = ' rgb(93, 206, 187)';

@@ -15,10 +15,12 @@ var gIntervalTimer;
 var gIsRightClick = false;
 var gHints;
 var gHintLocation;
-
+var gHelpLocation;
 
 
 function init() {
+    var elSafe = document.querySelector('.safe')
+    elSafe.innerText = 'safe\n' + 3;
     gHints = resetHints();
     gIsRightClick = false;
     gIsFirstMove = true;
@@ -105,7 +107,7 @@ function renderBoard(board) {
 
 function WhichButton(ev) {
 
-    console.log(ev);
+
     // *************  NOT SO NICE WAY TO GET COORDS   **************
 
     var temp = ev.currentTarget.classList;
@@ -117,7 +119,7 @@ function WhichButton(ev) {
 
     if (gIsFirstMove) {
         gIsFirstMove = false;
-        console.log(ev.which);
+        // console.log(ev.which);
         gIsRightClick = (ev.which === 3);
         startGame(ev.currentTarget, i, j);
         return;
@@ -134,7 +136,7 @@ function WhichButton(ev) {
 }
 
 function cellRightClick(i, j) {
-    console.log('right button');
+    // console.log('right button');
 
     if (!gBoard[i][j].isMarked) {
         if (gGame.markedCount === gLevel.mineCount) return;
@@ -159,8 +161,8 @@ function cellClicked(elBtn, i, j) {
     }
     if (gBoard[i][j].isShown || gBoard[i][j].isMarked || !gGame.isOn) return;
     if (gBoard[i][j].isMine) {
-        console.log('BOMB');
-        handleMineClicked(elBtn, i, j);
+        // console.log('BOMB');
+        handleMineClicked(i, j);
     } else exposeArea(elBtn, i, j);
 }
 
@@ -196,9 +198,19 @@ function checkVictory() {
     return false;
 }
 
-function handleMineClicked() {
+function handleMineClicked(rowIdx, colIdx) {
     if (gGame.live === 0) gameOver();
     else {
+        gBoard[rowIdx][colIdx].isShown = true;
+        renderBoard(gBoard);
+        gHelpLocation = {
+            i: rowIdx,
+            j: colIdx
+        }
+        setTimeout(function() {
+            gBoard[gHelpLocation.i][gHelpLocation.j].isShown = false;
+            renderBoard(gBoard);
+        }, 700);
         var elLive = document.querySelector('.lives');
         var hearts = '';
         for (var i = 0; i < gGame.live - 1; i++) {
@@ -232,7 +244,46 @@ function handleVictory() {
     gGame.shownCount = 0;
     gGame.isOn = false;
     clearInterval(gIntervalTimer);
+    storeData();
+}
 
+function storeData() {
+    console.log('store data');
+    switch (gDifficulty) {
+        case 4:
+            console.log('level easy');
+            if (!localStorage.bestScoreEasy) localStorage.bestScoreEasy = gGame.secsPassed;
+            if (localStorage.bestScoreEasy > gGame.secsPassed) {
+                localStorage.bestScoreEasy = gGame.secsPassed;
+                var userName = prompt('Well Done you have The best score, write your name for the leader bord:');
+                localStorage.bestPlayerEasy = userName + ' ROCKs with time of:' + localStorage.bestScoreEasy + ' sec';
+                console.log('level normal');
+            }
+            console.log('level easy');
+            break;
+        case 8:
+            console.log('level normal');
+            if (!localStorage.bestScoreNormal) localStorage.bestScoreNormal = gGame.secsPassed;
+            if (localStorage.bestScoreNormal > gGame.secsPassed) {
+                localStorage.bestScoreNormal = gGame.secsPassed;
+                var userName = prompt('Well Done you have The best score, write your name for the leader bord:');
+                localStorage.bestPlayerNormal = userName + ' ROCKs with time of:' + localStorage.bestScoreNormal + ' sec';
+                console.log('level normal');
+            }
+
+
+            break;
+        case 12:
+            if (!localStorage.bestScoreExtream) localStorage.bestScoreExtream = gGame.secsPassed;
+            if (localStorage.bestScoreExtream > gGame.secsPassed) {
+                localStorage.bestScoreExtream = gGame.secsPassed;
+                var userName = prompt('Well Done you have The best score, write your name for the leader bord:');
+                localStorage.bestPlayerExtream = userName + ' ROCKs with time of:' + localStorage.bestScoreExtream + ' sec';
+                console.log('level normal');
+            }
+            break;
+    }
+    changeDifficulty(gDifficulty);
 }
 
 function restartGame() {
@@ -300,4 +351,35 @@ function closeHints() {
         }
     }
     renderBoard(gBoard);
+}
+
+function showSafe() {
+    if ((gGame.isHelp === true) || (gGame.safeCount === 0)) return;
+    var safeCellCount = gDifficulty ** 2 - gGame.shownCount - gLevel.mineCount;
+    var rndIdx = getRandomInt(0, safeCellCount);
+    for (var i = 0; i < gDifficulty; i++) {
+        console.log('show safe');
+        for (var j = 0; j < gDifficulty; j++) {
+            if (gBoard[i][j].isMine || gBoard[i][j].isShown) continue;
+            if (rndIdx === 0) {
+                gGame.safeCount--;
+                var elSafe = document.querySelector('.safe')
+                elSafe.innerText = 'safe\n' + gGame.safeCount;
+                gGame.isHelp = true;
+                gBoard[i][j].isShown = true;
+                gHelpLocation = {
+                    i,
+                    j
+                }
+                renderBoard(gBoard);
+                setTimeout(function() {
+                    gBoard[gHelpLocation.i][gHelpLocation.j].isShown = false;
+                    renderBoard(gBoard);
+                    gGame.isHelp = false;
+                }, 1500);
+                return;
+            } else rndIdx--;
+
+        }
+    }
 }

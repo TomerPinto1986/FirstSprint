@@ -14,11 +14,13 @@
         <h1>Mine Sweeper</h1>
 
         <div class="features">
+
             <div class="difficulty">
                 <button onclick="changeDifficulty(4)">Easy</button>
                 <button onclick="changeDifficulty(8)">Normal</button>
                 <button onclick="changeDifficulty(12)">World Class</button>
             </div>
+
             <div class="restart" onclick="restartGame(this)"> &#128512 </div>
             <div class="timer">Let's play</div>
             <div class="lives">&#128156&#128156&#128156</div>
@@ -27,10 +29,12 @@
                 <button onclick="getHint(this,1)">💡</button>
                 <button onclick="getHint(this,2)">💡</button>
             </div>
-
-
+            <div class="score">bestscore</div>
 
         </div>
+
+        <div class="safe" onclick="showSafe()"></div>
+
         <table class="table">
 
             <tbody class="board">
