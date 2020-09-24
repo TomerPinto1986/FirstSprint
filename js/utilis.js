@@ -91,3 +91,16 @@ function createFirstBoard() {
     }
     return board;
 }
+
+function startTimer() {
+    gStartTime = Date.now();
+    gIntervalTimer = setInterval(runTimer, 1);
+}
+
+function runTimer() {
+    var elModal = document.querySelector('.timer');
+    // elModal.style.display = 'block';
+    var timer = ((Date.now() - gStartTime)) / 1000;
+    elModal.innerText = timer;
+    return;
+}

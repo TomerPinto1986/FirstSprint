@@ -1,10 +1,20 @@
+body {
+    background-color: rgb(255, 254, 173);
+}
+
 h1 {
-    background-color: rgb(255, 139, 156);
+    /* background-color: rgb(102, 43, 126); */
     text-align: center;
-    color: rgb(49, 10, 46);
+    color: coral;
+}
+
+.board {
+    position: relative;
+    z-index: -1;
 }
 
 .board td {
+    position: relative;
     padding: 10px;
     width: 10px;
     height: 10px;
@@ -18,33 +28,97 @@ h1 {
 }
 
 .table {
-    position: relative;
+    position: absolute;
     left: 500px;
-    background-color: rgb(255, 139, 156);
+    background-color: rgb(102, 43, 126);
     color: lightcyan;
     border: 1px solid rgb(255, 251, 0);
+    z-index: -1;
 }
 
-.difficulty button {
-    color: rgb(160, 68, 119);
-    background-color: rgb(112, 226, 230);
-    margin-bottom: 20px;
-    margin-left: 10px;
-}
-
-.difficulty {
-    margin-left: 550px;
-}
-
-.modal {
+.victory {
     position: absolute;
-    left: 400px;
-    padding: 5px;
-    background-color: rgb(138, 21, 21);
+    font-size: 50px;
+    color: coral;
+    text-align: center;
+    padding: 20px;
+    left: 150px;
+    top: 350px;
+    width: 260px;
+    background-color: rgb(113, 192, 179);
+    border-radius: 40%;
+    border: solid 1px rgb(161, 155, 96);
+    z-index: 1;
+    display: none;
+}
+
+.game-over {
+    position: absolute;
+    left: 50px;
+    bottom: -20px;
+    display: none;
+    border: 2px black;
+}
+
+.timer {
+    position: relative;
+    font-size: 20px;
+    top: 20px;
+    text-align: center;
+    color: rgb(61, 37, 0);
+}
+
+.features {
+    position: absolute;
+    left: 150px;
+    top: 50px;
+    width: 300px;
+    height: 200px;
+    background-color: rgb(93, 206, 187);
+    border-radius: 10%;
+    border: solid 1px black;
 }
 
 .lives {
-    position: absolute;
-    top: 200px;
-    left: 380px;
+    position: relative;
+    top: 30px;
+    margin: auto;
+    text-align: center;
+    background-color: rgb(211, 77, 77);
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 5%;
+    width: 90px;
+    border: solid 1px black;
+}
+
+.restart {
+    position: relative;
+    top: 13px;
+    margin: auto;
+    text-align: center;
+    padding: 5px;
+    border-radius: 40%;
+    border: 1px black solid;
+    background-color: rgb(211, 77, 77);
+    width: 30px;
+}
+
+.difficulty button {
+    position: relative;
+    left: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    color: rgb(47, 0, 68);
+    background-color: rgb(211, 77, 77);
+}
+
+.difficulty {
+    position: relative;
+    margin: auto;
+    top: 8px;
+    width: 230px;
+    padding: 8px;
+    border-radius: 10%;
 }
