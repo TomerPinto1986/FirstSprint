@@ -1,5 +1,19 @@
 'use strict';
 
+
+function createCell() {
+    var cell = {
+        mineNegsCount: 0,
+        isShown: false,
+        isMine: false,
+        isMarked: false,
+        isZeroNegs: true,
+        isHinted: false
+    }
+    return cell;
+}
+
+
 function resetGame() {
     var gameStat = {
         isOn: true,
@@ -9,8 +23,15 @@ function resetGame() {
         live: 3,
         isGameHint: false,
         safeCount: 3,
-        isHelp: false
+        isHelp: false,
+        isManualMine: false,
+        manualCount: 2
     }
+    if (gIsMamualMode) {
+        gameStat.isManualMine = true;
+        gameStat.manualCount = gLevel.mineCount;
+    }
+
     return gameStat;
 }
 
@@ -87,25 +108,28 @@ function countNegs(mat, rowIdx, colIdx) {
 
 function changeDifficulty(difficulty) {
     gDifficulty = difficulty;
-    restartGame();
     switch (gDifficulty) {
         case 4:
+            gGame.manualCount = 2;
             console.log('Easy');
             var elBestScore = document.querySelector('.score');
             elBestScore.innerText = localStorage.bestPlayerEasy;
             break;
         case 8:
+            gGame.manualCount = 12;
             console.log('Normal');
             var elBestScore = document.querySelector('.score');
             console.log(elBestScore, localStorage.bestPlayerNormal);
             elBestScore.innerText = localStorage.bestPlayerNormal;
             break;
         case 12:
+            gGame.manualCount = 30;
             console.log('extream');
             var elBestScore = document.querySelector('.score');
             elBestScore.innerText = localStorage.bestPlayerExtream;
             break;
     }
+    restartGame();
 }
 
 function createFirstBoard() {
@@ -145,4 +169,12 @@ function resetHints() {
         elHints[i].style.backgroundColor = ' rgb(93, 206, 187)';
     }
     return hints;
+}
+
+function checkMineCoords(i, j) {
+    for (var idx = 0; idx < gMines.length; idx++) {
+        console.log(gMines[idx].i, ' mines i ', gMines[idx].j, ' mines j');
+        if ((gMines[idx].i === i) && (gMines[idx].j === j)) return false;
+    }
+    return true;
 }

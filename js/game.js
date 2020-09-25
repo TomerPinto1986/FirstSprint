@@ -17,6 +17,7 @@ var gHints;
 var gHintLocation;
 var gHelpLocation;
 var gisPause;
+var gIsMamualMode = false;
 
 function init() {
     // localStorage.clear();
@@ -40,7 +41,8 @@ function startGame(elBtn, i, j) {
     startTimer();
     gIsFirstMove = false;
     var StartIdx = i * gLevel.size + j;
-    gMines = resetMines(gLevel.mineCount, gDifficulty, StartIdx);
+    if (!gGame.isManualMine) gMines = resetMines(gLevel.mineCount, gDifficulty, StartIdx);
+    gGame.isManualMine = false;
     gBoard = buildBoard(gDifficulty, gMines);
     setMinesNegsCount(gBoard);
     if (!gIsRightClick) {
@@ -50,18 +52,6 @@ function startGame(elBtn, i, j) {
         cellRightClick(i, j);
     }
 
-}
-
-function createCell() {
-    var cell = {
-        mineNegsCount: 0,
-        isShown: false,
-        isMine: false,
-        isMarked: false,
-        isZeroNegs: true,
-        isHinted: false
-    }
-    return cell;
 }
 
 function setMinesNegsCount(board) {
@@ -83,6 +73,7 @@ function buildBoard(length, mines) {
             board[i][j] = createCell();
         }
     }
+    // if (gGame.isManualMine) return board;
 
     // *************   PUT SOME MINES!!  ****************
     for (var i = 0; i < mines.length; i++) {
@@ -90,6 +81,7 @@ function buildBoard(length, mines) {
     }
     return board;
 }
+
 
 function renderBoard(board) {
     var strHTML = '';
@@ -122,6 +114,28 @@ function WhichButton(ev) {
 
     // ******************************************************
 
+    // ***************** manual mode **********************
+    // debugger;
+    if ((gGame.isManualMine) && (gIsFirstMove)) {
+        gIsFirstMove = false;
+        gMines = [];
+    }
+
+    if ((gGame.isManualMine) && (gGame.manualCount > 0)) {
+        console.log(gMines, { i, j });
+        if (!checkMineCoords(i, j)) return;
+        console.log(i, j, ' OK!');
+        gMines.push({ i, j })
+        gGame.manualCount--;
+        return;
+    }
+    if (gGame.isManualMine) {
+
+        startGame(ev.currentTarget, i, j);
+    }
+
+    // ******************************************************
+
     if (gIsFirstMove) {
         gIsFirstMove = false;
         gIsRightClick = (ev.which === 3);
@@ -140,7 +154,7 @@ function WhichButton(ev) {
 }
 
 function cellRightClick(i, j) {
-
+    if (gBoard[i][j].isShown) return;
     if (!gBoard[i][j].isMarked) {
         if (gGame.markedCount === gLevel.mineCount) return;
         gBoard[i][j].isMarked = !(gBoard[i][j].isMarked);
@@ -401,4 +415,14 @@ function showSafe() {
 
         }
     }
+}
+
+function playManualMine() {
+    var elManual = document.querySelector('.manual');
+    gIsMamualMode = !gIsMamualMode;
+    elManual.innerText = (gIsMamualMode) ? 'MANUAL\n ON' : 'MANUAL\n OFF'
+    console.log(gIsMamualMode);
+    var elvictory = document.querySelector('.victory');
+    elvictory.style.display = 'none';
+    init();
 }
