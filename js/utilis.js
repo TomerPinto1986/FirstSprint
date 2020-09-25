@@ -190,3 +190,22 @@ function updateBestScore() {
             break;
     }
 }
+
+function createBoardDeepCopy(board) {
+    var boardDeepCopy = createFirstBoard();
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board.length; j++) {
+            var cell = board[i][j];
+            var cellCopy = {
+                mineNegsCount: cell.mineNegsCount,
+                isShown: cell.isShown,
+                isMine: cell.isMine,
+                isMarked: cell.isMarked,
+                isZeroNegs: cell.isZeroNegs,
+                isHinted: cell.isHinted
+            }
+            boardDeepCopy[i][j] = cellCopy;
+        }
+    }
+    return boardDeepCopy;
+}

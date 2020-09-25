@@ -18,9 +18,11 @@ var gHintLocation;
 var gHelpLocation;
 var gisPause;
 var gIsMamualMode = false;
+var gDeepCopyBoard;
 
 function init() {
     // localStorage.clear();
+    gDeepCopyBoard = [];
     updateBestScore();
     var elSafe = document.querySelector('.safe')
     elSafe.innerText = 'safe\n' + 3;
@@ -152,6 +154,8 @@ function WhichButton(ev) {
 
 function cellRightClick(i, j) {
     if (gBoard[i][j].isShown) return;
+    // debugger;
+    gDeepCopyBoard.push(createBoardDeepCopy(gBoard));
     if (!gBoard[i][j].isMarked) {
         if (gGame.markedCount === gLevel.mineCount) return;
         gBoard[i][j].isMarked = !(gBoard[i][j].isMarked);
@@ -172,10 +176,15 @@ function cellClicked(elBtn, i, j) {
         handleClickHint(i, j);
         return;
     }
+
+
     if (gBoard[i][j].isShown || gBoard[i][j].isMarked || !gGame.isOn) return;
     if (gBoard[i][j].isMine) {
         handleMineClicked(i, j);
-    } else exposeArea(elBtn, i, j);
+    } else {
+        gDeepCopyBoard.push(createBoardDeepCopy(gBoard));
+        exposeArea(elBtn, i, j);
+    }
 }
 
 function exposeArea(elBtn, rowIdx, colIdx) {
@@ -423,4 +432,11 @@ function playManualMine() {
     var elvictory = document.querySelector('.victory');
     elvictory.style.display = 'none';
     init();
+}
+
+function undoLastMove() {
+    debugger;
+    if (gDeepCopyBoard.length === 0) return;
+    gBoard = gDeepCopyBoard.pop();
+    renderBoard(gBoard);
 }
