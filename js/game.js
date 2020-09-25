@@ -21,10 +21,7 @@ var gIsMamualMode = false;
 
 function init() {
     // localStorage.clear();
-    if (localStorage.bestPlayerEasy) {
-        var elBestScore = document.querySelector('.score');
-        elBestScore.innerText = localStorage.bestPlayerEasy;
-    }
+    updateBestScore();
     var elSafe = document.querySelector('.safe')
     elSafe.innerText = 'safe\n' + 3;
     gHints = resetHints();
@@ -387,6 +384,7 @@ function closeHints() {
 }
 
 function showSafe() {
+    if (gIsFirstMove) return;
     if ((gGame.isHelp === true) || (gGame.safeCount === 0)) return;
     var safeCellCount = gDifficulty ** 2 - gGame.shownCount - gLevel.mineCount;
     var rndIdx = getRandomInt(0, safeCellCount);

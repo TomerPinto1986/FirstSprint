@@ -107,28 +107,18 @@ function countNegs(mat, rowIdx, colIdx) {
 }
 
 function changeDifficulty(difficulty) {
-    gDifficulty = difficulty;
     switch (gDifficulty) {
         case 4:
             gGame.manualCount = 2;
-            console.log('Easy');
-            var elBestScore = document.querySelector('.score');
-            elBestScore.innerText = localStorage.bestPlayerEasy;
             break;
         case 8:
             gGame.manualCount = 12;
-            console.log('Normal');
-            var elBestScore = document.querySelector('.score');
-            console.log(elBestScore, localStorage.bestPlayerNormal);
-            elBestScore.innerText = localStorage.bestPlayerNormal;
             break;
         case 12:
             gGame.manualCount = 30;
-            console.log('extream');
-            var elBestScore = document.querySelector('.score');
-            elBestScore.innerText = localStorage.bestPlayerExtream;
             break;
     }
+    gDifficulty = difficulty;
     restartGame();
 }
 
@@ -177,4 +167,26 @@ function checkMineCoords(i, j) {
         if ((gMines[idx].i === i) && (gMines[idx].j === j)) return false;
     }
     return true;
+}
+
+function updateBestScore() {
+    switch (gDifficulty) {
+        case 4:
+            console.log('Easy');
+            var elBestScore = document.querySelector('.score');
+            elBestScore.innerText = localStorage.bestPlayerEasy;
+            break;
+        case 8:
+            console.log('Normal');
+            var elBestScore = document.querySelector('.score');
+            console.log(elBestScore, localStorage.bestPlayerNormal);
+            elBestScore.innerText = localStorage.bestPlayerNormal;
+            console.log(elBestScore.innerText);
+            break;
+        case 12:
+            console.log('extream');
+            var elBestScore = document.querySelector('.score');
+            elBestScore.innerText = localStorage.bestPlayerExtream;
+            break;
+    }
 }
