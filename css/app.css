@@ -43,26 +43,29 @@ h1 {
 
 .victory {
     position: absolute;
-    font-size: 50px;
-    color: coral;
-    text-align: center;
-    padding: 20px;
-    left: 150px;
-    top: 350px;
-    width: 260px;
-    background-color: rgb(113, 192, 179);
-    border-radius: 40%;
-    border: solid 1px rgb(161, 155, 96);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
     display: none;
+    border: 2px black;
+}
+
+.victory img {
+    opacity: 0.7;
 }
 
 .game-over {
     position: absolute;
-    left: 50px;
-    bottom: -20px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     display: none;
     border: 2px black;
+}
+
+.game-over img {
+    opacity: 0.8;
 }
 
 .safe {
@@ -170,13 +173,12 @@ h1 {
 
 .restart {
     position: relative;
+    z-index: 1;
     top: -30px;
     margin: auto;
     text-align: center;
     padding: 5px;
     border-radius: 40%;
-    /* border: 1px black solid; */
-    /* background-color: rgb(255, 255, 255); */
     width: fit-content;
 }
 
