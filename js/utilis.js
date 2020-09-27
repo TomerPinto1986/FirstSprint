@@ -119,6 +119,9 @@ function changeDifficulty(difficulty) {
             break;
     }
     gDifficulty = difficulty;
+    var elManual = document.querySelector('.manual');
+    gIsMamualMode = false;
+    elManual.innerText = 'MANUAL\n OFF';
     restartGame();
 }
 

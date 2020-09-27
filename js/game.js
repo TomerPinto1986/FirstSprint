@@ -19,10 +19,15 @@ var gHelpLocation;
 var gisPause;
 var gIsMamualMode = false;
 var gDeepCopyBoard;
+var gCopyLastMovesMarked;
+var gCopyLastMovesShown;
 
 function init() {
     // localStorage.clear();
+    clearInterval(gIntervalTimer);
     gDeepCopyBoard = [];
+    gCopyLastMovesMarked = [];
+    gCopyLastMovesShown = [];
     updateBestScore();
     var elSafe = document.querySelector('.safe')
     elSafe.innerText = 'safe\n' + 3;
@@ -156,6 +161,8 @@ function cellRightClick(i, j) {
     if (gBoard[i][j].isShown) return;
     // debugger;
     gDeepCopyBoard.push(createBoardDeepCopy(gBoard));
+    gCopyLastMovesMarked.push(gGame.markedCount);
+    gCopyLastMovesShown.push(gGame.shownCount);
     if (!gBoard[i][j].isMarked) {
         if (gGame.markedCount === gLevel.mineCount) return;
         gBoard[i][j].isMarked = !(gBoard[i][j].isMarked);
@@ -182,6 +189,8 @@ function cellClicked(elBtn, i, j) {
     if (gBoard[i][j].isMine) {
         handleMineClicked(i, j);
     } else {
+        gCopyLastMovesMarked.push(gGame.markedCount);
+        gCopyLastMovesShown.push(gGame.shownCount);
         gDeepCopyBoard.push(createBoardDeepCopy(gBoard));
         exposeArea(elBtn, i, j);
     }
@@ -290,18 +299,19 @@ function storeData() {
 
             break;
         case 8:
+            console.log(localStorage.bestScoreNormal);
             if (!localStorage.bestScoreNormal) {
                 localStorage.bestScoreNormal = gGame.secsPassed;
                 var userName = prompt('You are first for now! enter your name:');
                 localStorage.bestPlayerNormal = userName + ' ROCKs with time of: ' + localStorage.bestScoreNormal + ' sec';
                 var elBestScore = document.querySelector('.score');
-                elBestScore.innerText = localStoraNormal;
+                elBestScore.innerText = localStorage.bestPlayerNormal;
             } else if (localStorage.bestScoreNormal > gGame.secsPassed) {
                 localStorage.bestScoreNormal = gGame.secsPassed;
                 var userName = prompt('Well Done you have The best score, write your name for the leader bord:');
-                localStoraNormal = userName + ' ROCKs with time of: ' + localStorage.bestScoreNormal + ' sec';
+                localStorage.bestPlayerNormal = userName + ' ROCKs with time of: ' + localStorage.bestScoreNormal + ' sec';
                 var elBestScore = document.querySelector('.score');
-                elBestScore.innerText = localStoraNormal;
+                elBestScore.innerText = localStorage.bestPlayerNormal;
             }
 
 
@@ -312,13 +322,13 @@ function storeData() {
                 var userName = prompt('You are first for now! enter your name:');
                 localStorage.bestPlayerExtream = userName + ' ROCKs with time of: ' + localStorage.bestScoreExtream + ' sec';
                 var elBestScore = document.querySelector('.score');
-                elBestScore.innerText = localStoraExtream;
+                elBestScore.innerText = localStorage.bestPlayerExtream;
             } else if (localStorage.bestScoreExtream > gGame.secsPassed) {
                 localStorage.bestScoreExtream = gGame.secsPassed;
                 var userName = prompt('Well Done you have The best score, write your name for the leader bord:');
-                localStoraExtream = userName + ' ROCKs with time of: ' + localStorage.bestScoreExtream + ' sec';
+                localStorage.bestPlayerExtream = userName + ' ROCKs with time of: ' + localStorage.bestScoreExtream + ' sec';
                 var elBestScore = document.querySelector('.score');
-                elBestScore.innerText = localStoraExtream;
+                elBestScore.innerText = localStorage.bestPlayerExtream;
             }
     }
 }
@@ -435,8 +445,10 @@ function playManualMine() {
 }
 
 function undoLastMove() {
-    debugger;
+    if (!gGame.isOn) return;
     if (gDeepCopyBoard.length === 0) return;
+    gGame.markedCount = gCopyLastMovesMarked.pop();
+    gGame.shownCount = gCopyLastMovesShown.pop();
     gBoard = gDeepCopyBoard.pop();
     renderBoard(gBoard);
 }
