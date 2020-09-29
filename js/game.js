@@ -441,7 +441,7 @@ function playManualMine() {
     console.log(gIsMamualMode);
     var elvictory = document.querySelector('.victory');
     elvictory.style.display = 'none';
-    init();
+    restartGame();
 }
 
 function undoLastMove() {
