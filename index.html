@@ -16,26 +16,26 @@
         <div class="features">
 
             <div class="difficulty">
-                <button onclick="changeDifficulty(4)">Easy</button>
-                <button onclick="changeDifficulty(8)">Normal</button>
-                <button onclick="changeDifficulty(12)">World Class</button>
+                <button onclick="changeDifficulty(4)" class="my-btn">Easy</button>
+                <button onclick="changeDifficulty(8)" class="my-btn">Normal</button>
+                <button onclick="changeDifficulty(12)" class="my-btn">World Class</button>
             </div>
 
-            <div class="restart" onclick="restartGame(this)"> &#128512 </div>
+            <div class="restart my-btn" onclick="restartGame(this)"> &#128512 </div>
             <div class="timer">Let's play</div>
             <div class="lives">&#128156&#128156&#128156</div>
             <div class="hints">
-                <button onclick="getHint(this,0)">💡</button>
-                <button onclick="getHint(this,1)">💡</button>
-                <button onclick="getHint(this,2)">💡</button>
+                <button onclick="getHint(this,0)" class="my-btn">💡</button>
+                <button onclick="getHint(this,1)" class="my-btn">💡</button>
+                <button onclick="getHint(this,2)" class="my-btn">💡</button>
             </div>
             <div class="score">bestscore</div>
 
         </div>
 
-        <div class="safe" onclick="showSafe()"></div>
-        <div class="manual" onclick="playManualMine()">MANUAL <br> OFF</div>
-        <div class="undo" onclick="undoLastMove()">UNDO</div>
+        <div class="safe my-btn" onclick="showSafe()"></div>
+        <div class="manual my-btn" onclick="playManualMine()">MANUAL <br> OFF</div>
+        <div class="undo my-btn" onclick="undoLastMove()">UNDO</div>
 
         <table class="table">
 
