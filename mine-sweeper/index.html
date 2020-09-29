@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mine-sweeper</title>
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body onload="init()" oncontextmenu="return false;">
+    <div class="game">
+
+        <h1>Mine Sweeper</h1>
+
+        <div class="features">
+
+            <div class="difficulty">
+                <button onclick="changeDifficulty(4)" class="my-btn">Easy</button>
+                <button onclick="changeDifficulty(8)" class="my-btn">Normal</button>
+                <button onclick="changeDifficulty(12)" class="my-btn">World Class</button>
+            </div>
+
+            <div class="restart my-btn" onclick="restartGame(this)"> &#128512 </div>
+            <div class="timer">Let's play</div>
+            <div class="lives">&#128156&#128156&#128156</div>
+            <div class="hints">
+                <button onclick="getHint(this,0)" class="my-btn">💡</button>
+                <button onclick="getHint(this,1)" class="my-btn">💡</button>
+                <button onclick="getHint(this,2)" class="my-btn">💡</button>
+            </div>
+            <div class="score">bestscore</div>
+
+        </div>
+
+        <div class="safe my-btn" onclick="showSafe()"></div>
+        <div class="manual my-btn" onclick="playManualMine()">MANUAL <br> OFF</div>
+        <div class="undo my-btn" onclick="undoLastMove()">UNDO</div>
+
+        <table class="table">
+
+            <tbody class="board">
+            </tbody>
+
+        </table>
+
+        <div class="game-over"><img src="img/gameover.jpg" alt="game-over"></div>
+        <div class="victory"><img src="img/victory.png" alt=""></div>
+
+    </div>
+
+    <script src="js/utilis.js"></script>
+    <script src="js/game.js"></script>
+</body>
+
+</html>
